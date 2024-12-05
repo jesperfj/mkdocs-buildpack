@@ -12,3 +12,4 @@ BUILDPACK_DIR="$(dirname "$(dirname "$0")")"
 
 cd $BUILD_DIR
 pipenv run mkdocs build
+cp $BUILDPACK_DIR/server.py .
