@@ -10,7 +10,5 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 BUILDPACK_DIR="$(dirname "$(dirname "$0")")"
 
-pip3 install pipenv
 cd $BUILD_DIR
-pipenv install --system --deploy
 pipenv run mkdocs build
