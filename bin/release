@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
-echo "--- {}"
+cat << EOF
+---
+default_process_types:
+  web: python server.py
+EOF
