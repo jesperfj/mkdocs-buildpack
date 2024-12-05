@@ -3,11 +3,14 @@ import base64
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 # Set your username and password here
-USERNAME = "user"
-PASSWORD = "password"
+USERNAME = os.getenv("HTTP_BASIC_AUTH_USER")
+PASSWORD = os.getenv("HTTP_BASIC_AUTH_PASSWORD")
 
 # Directory to serve files from
-SERVE_DIRECTORY = "site"
+SERVE_DIRECTORY = os.getenv("SERVER_DIRECTORY", "site"))
+
+# Default port
+DEFAULT_PORT = 8001
 
 class AuthHTTPRequestHandler(SimpleHTTPRequestHandler):
     def do_HEAD(self):
@@ -44,9 +47,13 @@ class AuthHTTPRequestHandler(SimpleHTTPRequestHandler):
 def run(server_class=HTTPServer, handler_class=AuthHTTPRequestHandler):
     # Change to the directory to serve files from
     os.chdir(SERVE_DIRECTORY)
-    server_address = ("", 8001)  # Serve on all interfaces, port 8000
+    
+    # Get the port from the environment variable or use the default
+    port = int(os.getenv("PORT", DEFAULT_PORT))
+    server_address = ("", port)
+    
     httpd = server_class(server_address, handler_class)
-    print(f"Serving files from {SERVE_DIRECTORY} on port 8000 with basic authentication...")
+    print(f"Serving files from {SERVE_DIRECTORY} on port {port} with basic authentication...")
     httpd.serve_forever()
 
 if __name__ == "__main__":
