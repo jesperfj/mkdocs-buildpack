@@ -14,13 +14,29 @@ DEFAULT_PORT = 8001
 
 class AuthHTTPRequestHandler(SimpleHTTPRequestHandler):
     def do_HEAD(self):
+        self._handle_redirect()
         self._authenticate()
 
     def do_GET(self):
+        if self._handle_redirect():
+            return
         if not self._authenticate():
             return
         super().do_GET()
 
+    def _handle_redirect(self):
+        """Redirect HTTP requests to HTTPS."""
+        if self.headers.get("X-Forwarded-Proto") != "https":
+            host = self.headers.get("Host")
+            if host:
+                https_url = f"https://{host}{self.path}"
+                self.send_response(301)
+                self.send_header("Location", https_url)
+                self.end_headers()
+                self.wfile.write(b"Redirecting to HTTPS...")
+            return True
+        return False
+        
     def _authenticate(self):
         """Check for proper authentication."""
         auth_header = self.headers.get("Authorization")
