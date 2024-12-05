@@ -7,7 +7,7 @@ USERNAME = os.getenv("HTTP_BASIC_AUTH_USER")
 PASSWORD = os.getenv("HTTP_BASIC_AUTH_PASSWORD")
 
 # Directory to serve files from
-SERVE_DIRECTORY = os.getenv("SERVER_DIRECTORY", "site"))
+SERVE_DIRECTORY = os.getenv("SERVER_DIRECTORY", "site")
 
 # Default port
 DEFAULT_PORT = 8001
